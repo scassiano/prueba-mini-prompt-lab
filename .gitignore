@@ -1,2 +1,5 @@
 #Ignore Python Virtual Environment
 .venv/
+
+#Ignore environment variables
+.env
