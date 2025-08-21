@@ -3,3 +3,9 @@
 
 #Ignore environment variables
 .env
+
+#Ignore python cache files
+/pycache/*
+__pycache__/
+**/__pycache__/
+**/*.pyc
