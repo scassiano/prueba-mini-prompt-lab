@@ -9,3 +9,6 @@
 __pycache__/
 **/__pycache__/
 **/*.pyc
+
+#Ignore the chroma folder 
+chroma/
