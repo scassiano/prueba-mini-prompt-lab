@@ -1,6 +1,13 @@
 import streamlit as st
 import torch
 
+#Las siguientes lineas son necesarias para prevenir un error por una version desactualizada de 
+#sqlite3 que hay cuando se despliega la aplicación en la nube de streamlit.
+#No tiene que ver directamente con la funcionalidad de la aplicación
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 #Esta linea previene que salga una advertencia en consola por un error que tiene temporalmente Streamlit con Torch.
 #No es obligatoria y no tiene relacion con la aplicacion
 torch.classes.__path__ = [] 
