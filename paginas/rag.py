@@ -31,11 +31,11 @@ if len(resultados['documents']) > 0:
         for index in range(len(documentos['ids'][0])):
             if documentos['distances'][0][index] <= 0.5:
                 contador += 1
-                string_apuntes += f"Apunte {contador}: {documentos['documents'][0][index]}\n\n"
+                string_documentos += f"Apunte {contador}: {documentos['documents'][0][index]}\n\n"
 
         #En caso de que no se encontró ningun apunte relevante
-        if string_apuntes == "":
-            string_apuntes = "No se encontraron apuntes relevantes para la pregunta"
+        if string_documentos == "":
+            string_documentos = "No se encontraron apuntes relevantes para la pregunta"
 
         #Una vez se tiene un string con todos los documentos relevantes se insertan estos documentos
         # En el prompt final que se va a realizar al LLM
