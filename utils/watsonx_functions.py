@@ -1,0 +1,130 @@
+from ibm_watsonx_ai.foundation_models import ModelInference
+from ibm_watsonx_ai.metanames import GenTextParamsMetaNames as GenParams
+from dotenv import load_dotenv
+import os
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+import requests
+import base64
+
+#Cargar las variables de entorno escritas en el archivo .env
+load_dotenv()
+
+#Se asginan las variables de entorno a variables en el script
+watsonx_api_key = os.environ["WATSONX_API_KEY"]
+ibm_cloud_url = os.environ["IBM_CLOUD_URL"]
+watsonx_project_id = os.environ["WATSONX_PROJECT_ID"]
+
+#Se crea el diccionario creds, el cual es utilizado en el llamado a WatsonX
+creds = {"url": ibm_cloud_url, "apikey": watsonx_api_key}
+
+#Funcion para llamar modelos de texto alojados en WatsonX
+def call_watsonx_text_model(
+    prompt: str,
+    id_modelo: str,
+    min_tokens: int,
+    max_tokens: int,
+    modo: str,
+    repetition_penalty: float,
+    temperatura: float = 0.7,
+    top_p: float = 1.00,
+    top_n: int = 50,
+    random_seed: int = None):
+
+    if modo == "Greedy":
+        #Si el modo es greedy, le pasamos los siguientes parametros al modelo
+        parametros = {
+            GenParams.DECODING_METHOD: "greedy",
+            GenParams.MIN_NEW_TOKENS: min_tokens,
+            GenParams.MAX_NEW_TOKENS: max_tokens,
+            GenParams.REPETITION_PENALTY: repetition_penalty,
+        }
+
+    elif modo == "Sampling":
+        #Si el modo es sampling, se le pasan los siguientes parametros al modelo
+        parametros = {
+            GenParams.DECODING_METHOD: "sample",
+            GenParams.MIN_NEW_TOKENS: min_tokens,
+            GenParams.MAX_NEW_TOKENS: max_tokens,
+            GenParams.TEMPERATURE: temperatura,
+            GenParams.TOP_P: top_p,
+            GenParams.TOP_K: top_n,
+            GenParams.REPETITION_PENALTY: repetition_penalty
+        }
+        #Si el usuario especifico una random seed (es decir el valor de random_seed es None), 
+        # esta random seed se incluye en el diccionario de parametros
+        if random_seed is not None:
+            parametros[GenParams.RANDOM_SEED] = random_seed
+
+    #Se crea un objeto ModelInference con todos los datos proporcionados
+    watsonx_model = ModelInference(model_id=id_modelo, params=parametros, credentials=creds, project_id=watsonx_project_id)
+
+    #Utilizando el metodo generate_text del objeto ModelInference se hace un 
+    #llamado al modelo con el prompt que se pasa como argumento. El modelo se encuentra alojado en IBM Cloud.
+    #La función retorna el texto generado por el modelo.
+    watsonx_response = watsonx_model.generate_text(prompt)
+    return watsonx_response
+
+#Funcion para llamar modelos multimodales de vision alojados en WatsonX
+def call_watsonx_vision_model(
+    prompt: str,
+    imagen,
+    id_modelo: str,
+    max_tokens: int):
+
+    #Leer los bytes de la imagen
+    image_bytes = imagen.getvalue()
+
+    #Codificar la imagen en base 64
+    image_base64_encoded_bytes = base64.b64encode(image_bytes)
+
+    #Decodificar de base 64 a un string con codificacion utf8
+    image_utf8_string = image_base64_encoded_bytes.decode('utf-8')
+
+    #Crear un autenticador para llamar a WatsonX
+    authenticator = IAMAuthenticator(watsonx_api_key)
+
+    #Generar un bearer token
+    bearer_token = authenticator.token_manager.get_token()
+
+    #Definir la url a la que se va a hacer la consulta:
+    url = "https://us-south.ml.cloud.ibm.com/ml/v1/text/chat?version=2023-05-29"
+
+    #Definir el body de la peticion, en esta se incluye el prompt que vamos a hacer y la imagen en los mensajes
+    body = {
+	"messages": [
+        {"role":"user",
+         "content":[
+            {"type":"text",
+              "text":prompt
+            },
+            {"type":"image_url",
+             "image_url":{"url":f"data:{imagen.type};base64,{image_utf8_string}"}
+            }
+        ]}
+    ],
+	"project_id": watsonx_project_id,
+	"model_id": id_modelo,
+	"max_tokens": max_tokens,
+    "temperature": 0,
+    "top_p": 1,
+    "frecuency_penalty":0,
+    "presence_penalty":0
+    }
+
+    #Headers de la peticion
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer "+ bearer_token
+    }
+
+    #Se realiza la peticion al modelo
+    response = requests.post(url, headers=headers, json=body)
+
+    #Si la respuesta no es exitosa generar un error
+    if response.status_code != 200:
+        raise Exception("Non-200 response: "+ str(response.text))
+    
+    #Si la respuesta fue exitosa entonces leer el json de la respuesta y retornar el texto generado por el modelo
+    response_json = response.json()
+    return response_json['choices'][0]['message']['content']
