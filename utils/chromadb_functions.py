@@ -22,7 +22,12 @@ def agregar_documento_bd(identificador:str, documento:str):
     #Se define la funcion de embedding que se va a usar en los documentos de la coleccion
     mi_coleccion = chroma_client.get_or_create_collection(
         name="mi_coleccion", 
-        embedding_function=embedding_function
+        embedding_function=embedding_function,
+        configuration={
+            "hnsw": {
+                "space":"cosine"
+            }
+        }
     )
 
     #Se agrega el documento a la base de datos vectorial:
@@ -49,7 +54,12 @@ def obtener_todos_los_documentos_bd():
     #Se define la funcion de embedding que se va a usar en los documentos de la coleccion
     mi_coleccion = chroma_client.get_or_create_collection(
         name="mi_coleccion", 
-        embedding_function=embedding_function
+        embedding_function=embedding_function,
+        configuration={
+            "hnsw": {
+                "space":"cosine"
+            }
+        }
     )
 
     #Obtener los documentos guardados en la coleccion "mi_coleccion"
@@ -74,7 +84,12 @@ def eliminar_documento_segun_id_bd(identificador:str):
     #Se define la funcion de embedding que se va a usar en los documentos de la coleccion
     mi_coleccion = chroma_client.get_or_create_collection(
         name="mi_coleccion", 
-        embedding_function=embedding_function
+        embedding_function=embedding_function,
+        configuration={
+            "hnsw": {
+                "space":"cosine"
+            }
+        }
     )
 
     #Eliminar de la coleccion "mi_coleccion" el documento que tiene el identificador recibido
@@ -100,7 +115,12 @@ def realizar_consulta_a_la_bd(documento_consulta:str, max_resultados:int):
     #Se define la funcion de embedding que se va a usar en los documentos de la coleccion
     mi_coleccion = chroma_client.get_or_create_collection(
         name="mi_coleccion", 
-        embedding_function=embedding_function
+        embedding_function=embedding_function,
+        configuration={
+            "hnsw": {
+                "space":"cosine"
+            }
+        }
     )
 
     #Obtener los documentos guardados en la coleccion "mi_coleccion"
