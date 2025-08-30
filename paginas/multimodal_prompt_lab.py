@@ -6,7 +6,7 @@ st.subheader("Interacción con un LLM multimodal")
 initial_column1, initial_column2 = st.columns([0.7,0.3])
 
 with initial_column1:
-    modelo_seleccionado = st.selectbox("Elige el modelo que quieres utilizar", ["meta-llama/llama-4-maverick-17b-128e-instruct-fp8", "meta-llama/llama-3-2-90b-vision-instruct","meta-llama/llama-3-2-11b-vision-instruct", "ibm/granite-vision-3-2-2b", "mistralai/mistral-small-3-1-24b-instruct-2503"]) 
+    modelo_seleccionado = st.selectbox("Elige el modelo que quieres utilizar", ["Llama 4 Maverick", "Llama 3.2 90b Vision","IBM Granite 3.2 Vision", "Mistral Small 3.1"]) 
 
 with initial_column2:
     max_tokens_seleccionados = st.number_input("Tokens de respuesta máximos", min_value=0, value=900)

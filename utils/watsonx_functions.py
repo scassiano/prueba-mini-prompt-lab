@@ -7,6 +7,17 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 import requests
 import base64
 
+#Diccionario para mapear el identificador de un modelo con el nombre que se muestra en la aplicación
+mapeo_de_modelos = {
+    "IBM Granite 3.3":"ibm/granite-3-3-8b-instruct",
+    "Mistral Large":"mistralai/mistral-large", 
+    "Mistral Small 3.1": "mistralai/mistral-small-3-1-24b-instruct-2503",
+    "Llama 3.3": "meta-llama/llama-3-3-70b-instruct",
+    "Llama 4 Maverick": "meta-llama/llama-4-maverick-17b-128e-instruct-fp8",
+    "Llama 3.2 90b Vision": "meta-llama/llama-3-2-90b-vision-instruct",
+    "IBM Granite 3.2 Vision": "ibm/granite-vision-3-2-2b"
+}
+
 #Cargar las variables de entorno escritas en el archivo .env
 load_dotenv()
 
@@ -57,7 +68,7 @@ def call_watsonx_text_model(
             parametros[GenParams.RANDOM_SEED] = random_seed
 
     #Se crea un objeto ModelInference con todos los datos proporcionados
-    watsonx_model = ModelInference(model_id=id_modelo, params=parametros, credentials=creds, project_id=watsonx_project_id)
+    watsonx_model = ModelInference(model_id=mapeo_de_modelos[id_modelo], params=parametros, credentials=creds, project_id=watsonx_project_id)
 
     #Utilizando el metodo generate_text del objeto ModelInference se hace un 
     #llamado al modelo con el prompt que se pasa como argumento. El modelo se encuentra alojado en IBM Cloud.
@@ -87,7 +98,7 @@ def call_watsonx_chat_mode(
     )
 
     #Se crea un objeto ModelInference con todos los datos proporcionados
-    watsonx_model = ModelInference(model_id=id_modelo, params=parametros, credentials=creds, project_id=watsonx_project_id)
+    watsonx_model = ModelInference(model_id=mapeo_de_modelos[id_modelo], params=parametros, credentials=creds, project_id=watsonx_project_id)
 
     #Utilizando el metodo generate_text del objeto ModelInference se hace un 
     #llamado al modelo con el prompt que se pasa como argumento. El modelo se encuentra alojado en IBM Cloud.
@@ -136,7 +147,7 @@ def call_watsonx_vision_model(
         ]}
     ],
 	"project_id": watsonx_project_id,
-	"model_id": id_modelo,
+	"model_id": mapeo_de_modelos[id_modelo],
 	"max_tokens": max_tokens,
     "temperature": 0,
     "top_p": 1,

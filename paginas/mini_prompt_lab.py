@@ -8,7 +8,7 @@ st.subheader("Interacción directa con un LLM")
 
 columna_inicial_1, columna_inicial_2, columna_inicial_3 = st.columns([0.5,0.25,0.25])
 with columna_inicial_1:
-    modelo_seleccionado = st.selectbox("Elige el modelo que quieres utilizar", ["ibm/granite-3-3-8b-instruct","mistralai/mistral-large", "mistralai/mistral-small-3-1-24b-instruct-2503","meta-llama/llama-3-3-70b-instruct", "meta-llama/llama-4-maverick-17b-128e-instruct-fp8"])
+    modelo_seleccionado = st.selectbox("Elige el modelo que quieres utilizar", ["IBM Granite 3.3","Mistral Large", "Mistral Small 3.1","Llama 3.3", "Llama 4 Maverick"])
 
 with columna_inicial_2:
     min_tokens_seleccionados = st.number_input("Tokens de respuesta mínimos", min_value=0)
