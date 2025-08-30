@@ -20,7 +20,7 @@ st.subheader("Chatear con un LLM")
 col1, col2 = st.columns([0.6,0.4])
 
 with col2:
-    modelo_seleccionado = st.selectbox("Elige el modelo que quieres utilizar", ["IBM Granite 3.3","Mistral Small 3.1", "Llama 3.3", "Llama 4 Maverick"])
+    modelo_seleccionado = st.selectbox("Elige el modelo que quieres utilizar", ["IBM Granite 3.3", "Mistral Large", "Mistral Small 3.1", "Llama 3.3", "Llama 4 Maverick"])
 
     max_tokens_seleccionados = st.number_input("Tokens de respuesta máximos", min_value=0, value=200)
 
