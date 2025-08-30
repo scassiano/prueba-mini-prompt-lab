@@ -1,7 +1,7 @@
 import streamlit as st 
 from utils.watsonx_functions import call_watsonx_vision_model
 
-st.header("Interacción con un LLM multimodal")
+st.subheader("Interacción con un LLM multimodal")
 
 initial_column1, initial_column2 = st.columns([0.7,0.3])
 
