@@ -23,3 +23,6 @@ ddgs
 
 #Para herramienta de ArXiv
 arxiv
+
+#Para la herramienta de Wikipedia
+wikipedia

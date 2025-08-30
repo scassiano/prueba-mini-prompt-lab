@@ -33,12 +33,14 @@ col1, col2 = st.columns([0.6,0.4])
 
 with col2:
     #Elegir las tools a las que se quiere que tenga acceso el agente
-    seleccionar_tool_clima = st.toggle("Activar Herramienta Clima")
+    seleccionar_tool_fecha = st.toggle("Activar Herramienta Fecha Actual")
+    seleccionar_tool_clima = st.toggle("Activar Herramienta Clima Actual")
     seleccionar_tool_youtube = st.toggle("Activar Busqueda en Youtube")
     seleccionar_tool_suma = st.toggle("Activar Herramienta Suma de dos Numeros")
     seleccionar_tool_web= st.toggle("Activar Busqueda Web")
     seleccionar_tool_arxiv= st.toggle("Activar Busqueda en ArXiv")
     seleccionar_tool_contenido_web = st.toggle("Activar Busqueda por URL")
+    seleccionar_tool_wikipedia = st.toggle("Activar Busqueda en Wikipedia")
 
 with col1:
     messages_container = st.container(height=350)
@@ -73,12 +75,14 @@ with col1:
         respuesta = call_agent_with_tools(
             messages = st.session_state.agent_langchain_messages,
             amount_of_current_messages= len(st.session_state.agent_langchain_messages),
+            tool_fecha = seleccionar_tool_fecha,
             tool_clima = seleccionar_tool_clima,
             tool_youtube = seleccionar_tool_youtube,
             tool_suma = seleccionar_tool_suma,
             tool_web=seleccionar_tool_web,
             tool_arxiv=seleccionar_tool_arxiv,
-            tool_revision_url=seleccionar_tool_contenido_web
+            tool_revision_url=seleccionar_tool_contenido_web,
+            tool_wikipedia = seleccionar_tool_wikipedia
         )
 
         for result in respuesta:

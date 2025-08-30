@@ -2,6 +2,8 @@
 import os
 import time
 import requests
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from langchain_ibm import ChatWatsonx
 from langchain_core.tools import Tool
@@ -15,7 +17,8 @@ from langchain_community.utilities import OpenWeatherMapAPIWrapper
 from langchain_community.tools import DuckDuckGoSearchResults
 from langchain_community.utilities import DuckDuckGoSearchAPIWrapper
 from langchain_community.utilities import ArxivAPIWrapper
-
+from langchain_community.tools import WikipediaQueryRun
+from langchain_community.utilities import WikipediaAPIWrapper
 
 from langgraph.prebuilt import create_react_agent
 
@@ -85,17 +88,33 @@ def obtener_contenido_pagina_web(url: str) -> str:
     
     return texto_pagina
 
+#Herramienta personalizada que permite saber la fecha y hora actual
+@tool
+def obtener_fecha_actual() -> str:
+    """Permite saber cual es la fecha y hora actuales."""
+    bogota_tz = ZoneInfo("America/Bogota")
+    fecha_hora_actual = datetime.now(bogota_tz)
+    return str(fecha_hora_actual)
 
+#Herramienta para busqueda en Wikipedias
+wikipedia_search_function = WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper(top_k_results=1))
+wikipedia_search_tool = Tool(
+    name="busqueda_en_wikipedia",
+    description="Busca información sobre articulos que estan en Wikipedia.",
+    func=wikipedia_search_function.run,
+)
 
 def call_agent_with_tools(
         messages: list, 
         amount_of_current_messages: int = 0,
+        tool_fecha: bool = False,
         tool_clima: bool = False,
         tool_youtube: bool = False,
         tool_suma: bool = False,
         tool_web: bool = False,
         tool_arxiv: bool = False,
-        tool_revision_url: bool = False):
+        tool_revision_url: bool = False,
+        tool_wikipedia: bool = False):
     
     #Definir el modelo que se va a usar
     llm = ChatWatsonx(
@@ -114,6 +133,8 @@ def call_agent_with_tools(
     #Definir la lista de herramientas que tendra el agente
     tools = []
 
+    if tool_fecha:
+        tools.append(obtener_fecha_actual)
     if tool_clima:
         tools.append(weather_search_tool)
     if tool_youtube:
@@ -126,6 +147,8 @@ def call_agent_with_tools(
         tools.append(arxiv_search_tool)
     if tool_revision_url:
         tools.append(obtener_contenido_pagina_web)
+    if tool_wikipedia:
+        tools.append(wikipedia_search_tool)
 
     #Definir el agente y las tools a las que va a tener acceso
     agent_executor = create_react_agent(llm, tools)
