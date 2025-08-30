@@ -2,7 +2,24 @@ streamlit==1.44.1
 ibm-watsonx-ai==1.3.3
 ibm-cloud-sdk-core==3.23.0
 python-dotenv==1.1.0
-chromadb==1.0.0
-pysqlite3-binary
-sentence-transformers==4.0.2
-transformers==4.50.3
+#chromadb==1.0.0
+#pysqlite3-binary
+#sentence-transformers==4.0.2
+#transformers==4.50.3
+
+#Para los agentes
+langchain_community
+langgraph
+langchain-ibm
+
+#Para la herramienta del clima con Open Weather Map
+pyowm
+
+#Para la herramienta de busqueda de videos por youtube
+youtube_search
+
+#Para la herramienta de busqueda web
+ddgs
+
+#Para herramienta de ArXiv
+arxiv

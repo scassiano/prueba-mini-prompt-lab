@@ -1,7 +1,7 @@
 import streamlit as st 
 from utils.watsonx_functions import call_watsonx_vision_model
 
-st.title("Mini Prompt Lab Multimodal")
+st.header("Interacción con un LLM multimodal")
 
 modelo_seleccionado = st.selectbox("Elige el modelo que quieres utilizar", ["meta-llama/llama-4-maverick-17b-128e-instruct-fp8", "meta-llama/llama-3-2-90b-vision-instruct","meta-llama/llama-3-2-11b-vision-instruct", "ibm/granite-vision-3-2-2b", "mistralai/mistral-small-3-1-24b-instruct-2503"]) 
 

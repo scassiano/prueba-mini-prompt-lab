@@ -1,5 +1,6 @@
 from ibm_watsonx_ai.foundation_models import ModelInference
 from ibm_watsonx_ai.metanames import GenTextParamsMetaNames as GenParams
+from ibm_watsonx_ai.foundation_models.schema import TextChatParameters
 from dotenv import load_dotenv
 import os
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
@@ -61,9 +62,41 @@ def call_watsonx_text_model(
     #Utilizando el metodo generate_text del objeto ModelInference se hace un 
     #llamado al modelo con el prompt que se pasa como argumento. El modelo se encuentra alojado en IBM Cloud.
     #La función retorna el texto generado por el modelo.
-    watsonx_response = watsonx_model.generate_text(prompt)
-    return watsonx_response
+    watsonx_response = watsonx_model.generate_text_stream(prompt)
+    for chunk in watsonx_response:
+        yield chunk
 
+#Funcion para llamar a los modelos de watsonx en el modo chat
+def call_watsonx_chat_mode(
+    messages: list,
+    id_modelo: str,
+    max_tokens_respuesta: int,
+    penalidad_por_frecuencia: float = 0,
+    penalidad_por_presencia: float = 0,
+    temperatura: float = 0,
+    top_p: float = 0.01,
+    random_seed: int = None):
+
+    parametros = TextChatParameters(
+        max_tokens=max_tokens_respuesta,
+        temperature=temperatura,
+        frequency_penalty=penalidad_por_frecuencia,
+        presence_penalty=penalidad_por_presencia,
+        top_p=top_p,
+        seed= random_seed
+    )
+
+    #Se crea un objeto ModelInference con todos los datos proporcionados
+    watsonx_model = ModelInference(model_id=id_modelo, params=parametros, credentials=creds, project_id=watsonx_project_id)
+
+    #Utilizando el metodo generate_text del objeto ModelInference se hace un 
+    #llamado al modelo con el prompt que se pasa como argumento. El modelo se encuentra alojado en IBM Cloud.
+    #La función retorna el texto generado por el modelo.
+    watsonx_response = watsonx_model.chat_stream(messages)
+    for chunk in watsonx_response:
+        if chunk['choices']:
+            yield chunk['choices'][0]['delta'].get('content', '')
+    
 #Funcion para llamar modelos multimodales de vision alojados en WatsonX
 def call_watsonx_vision_model(
     prompt: str,
