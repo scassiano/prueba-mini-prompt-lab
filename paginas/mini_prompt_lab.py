@@ -4,7 +4,7 @@ from utils.watsonx_functions import call_watsonx_text_model
 # Hacer esta página amplia
 st.set_page_config(layout="wide")
 
-st.subheader("Interacción directa con el LLM")
+st.subheader("Interacción directa con un LLM")
 
 columna_inicial_1, columna_inicial_2, columna_inicial_3 = st.columns([0.5,0.25,0.25])
 with columna_inicial_1:

@@ -14,6 +14,7 @@ import streamlit as st
 #torch.classes.__path__ = [] 
 
 #Definir las páginas que va a tener la aplicacion
+pagina_inicio = st.Page(page='./paginas/inicio.py', title='Página de inicio', icon='🏠')
 pagina_chat_prompt_lab = st.Page(page='./paginas/chat_prompt_lab.py', title='Chatear con un LLM')
 pagina_mini_prompt_lab = st.Page(page='./paginas/mini_prompt_lab.py', title='Interacción directa con un LLM')
 pagina_multimodal_prompt_lab = st.Page(page='./paginas/multimodal_prompt_lab.py', title='Interacción con un LLM Multimodal')
@@ -25,7 +26,8 @@ pagina_agente = st.Page(page='./paginas/chat_agente_lab.py', title='Interacción
 # y mostrarlas en la barra lateral de la aplicacion
 pagina_seleccionada = st.navigation(
     {
-        "Interacción con los LLM individualmente":[pagina_mini_prompt_lab, pagina_chat_prompt_lab, pagina_multimodal_prompt_lab],
+        "Inicio": [pagina_inicio],
+        "Interacción con los LLM":[pagina_mini_prompt_lab, pagina_chat_prompt_lab, pagina_multimodal_prompt_lab],
         "Interacción con un agente": [pagina_agente],
         #"Interacción con una base de datos vectorial": [pagina_interaccion_db],
         #"Interacción con un LLM con acceso a la base de datos vectorial": [pagina_rag]
