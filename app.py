@@ -1,5 +1,5 @@
 import streamlit as st
-import torch
+#import torch
 
 #Las siguientes lineas son necesarias para prevenir un error por una version desactualizada de 
 #sqlite3 que hay cuando se despliega la aplicación en la nube de streamlit.
@@ -11,7 +11,7 @@ import torch
 
 #Esta linea previene que salga una advertencia en consola por un error que tiene temporalmente Streamlit con Torch.
 #No es obligatoria y no tiene relacion con la aplicacion
-torch.classes.__path__ = [] 
+#torch.classes.__path__ = [] 
 
 #Definir las páginas que va a tener la aplicacion
 pagina_chat_prompt_lab = st.Page(page='./paginas/chat_prompt_lab.py', title='Chatear con un LLM')
