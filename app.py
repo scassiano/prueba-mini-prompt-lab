@@ -27,7 +27,7 @@ pagina_agente = st.Page(page='./paginas/chat_agente_lab.py', title='Interacción
 pagina_seleccionada = st.navigation(
     {
         "Inicio": [pagina_inicio],
-        "Interacción con los LLM":[pagina_mini_prompt_lab, pagina_chat_prompt_lab, pagina_multimodal_prompt_lab],
+        "Interacción con los LLM":[pagina_chat_prompt_lab, pagina_mini_prompt_lab, pagina_multimodal_prompt_lab],
         "Interacción con un agente": [pagina_agente],
         #"Interacción con una base de datos vectorial": [pagina_interaccion_db],
         #"Interacción con un LLM con acceso a la base de datos vectorial": [pagina_rag]
